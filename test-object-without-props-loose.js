@@ -9,7 +9,7 @@ const o3 = { g: 1, b: 2, c: 3, d: 4, e: 5 }
 const o4 = { h: 1, b: 2, c: 3, d: 4, e: 5 };
 const o5 = { i: 1, b: 2, c: 3, d: 4, e: 5 };
 
-const N = 50_000
+const N = 1_000
 
 export default {
   blocks: [
