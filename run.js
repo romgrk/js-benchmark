@@ -32,8 +32,10 @@ async function run(path) {
     console.log('ERROR: ' + e.message)
   }
 
+  const maxLength = blocks.reduce((max, block) => Math.max(max, block.id.length), 0)
+
   blocks.forEach(block => {
-    console.log(`CASE: ${(block.id + ':').padEnd(10, ' ')} `
+    console.log(`CASE: ${(block.id + ':').padEnd(maxLength + 1, ' ')} `
       + '#'.repeat(block.result.percent / 2).padEnd(50, '.')
       + ' ' + block.result.percent + '%'
       + ` (${block.result.amountOfRounds} ops)`

@@ -9,9 +9,10 @@ const commands = [
 commands.map(c => c + ' run.js').forEach(command => {
   const [cmd, ...args] = command.split(' ').concat(process.argv.slice(2))
 
+  const version = spawnSync(cmd, ['--version'], {}).stdout.toString().trim().split(' ').at(-1)
   const result = spawnSync(cmd, args, {})
 
-  console.log('### ' + cmd + ' ###')
+  console.log(`### ${cmd}: ${version} ###`)
   const output =
     result.stdout.toString() +
     result.stderr.toString()

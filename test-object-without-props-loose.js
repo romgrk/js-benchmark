@@ -7,6 +7,9 @@ const o1 = { a: 1, b: 2, c: 3, d: 4, e: 5 }
 const o2 = { f: 1, b: 2, c: 3, d: 4, e: 5 }
 const o3 = { g: 1, b: 2, c: 3, d: 4, e: 5 }
 const o4 = { h: 1, b: 2, c: 3, d: 4, e: 5 };
+const o5 = { i: 1, b: 2, c: 3, d: 4, e: 5 };
+
+const N = 50_000
 
 export default {
   blocks: [
@@ -30,11 +33,12 @@ export default {
 
         return () => {
           let o = null
-          for (let i = 0; i < 10000; i++) {
+          for (let i = 0; i < N; i++) {
             o=_objectWithoutPropertiesLoose(o1, exclude)
             o=_objectWithoutPropertiesLoose(o2, exclude)
             o=_objectWithoutPropertiesLoose(o3, exclude)
             o=_objectWithoutPropertiesLoose(o4, exclude)
+            o=_objectWithoutPropertiesLoose(o5, exclude)
           }
           return o
         }
@@ -59,11 +63,12 @@ export default {
 
         return () => {
           let o = null
-          for (let i = 0; i < 10000; i++) {
+          for (let i = 0; i < N; i++) {
             o=_objectWithoutPropertiesLoose(o1, exclude)
             o=_objectWithoutPropertiesLoose(o2, exclude)
             o=_objectWithoutPropertiesLoose(o3, exclude)
             o=_objectWithoutPropertiesLoose(o4, exclude)
+            o=_objectWithoutPropertiesLoose(o5, exclude)
           }
           return o
         }
