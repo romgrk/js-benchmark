@@ -16,7 +16,7 @@ export default {
     {
       id: 'initial',
       setup: () => {
-        function _objectWithoutPropertiesLoose(source, excluded) {
+        function _clone__keys(source, excluded) {
           if (source == null)
             return {};
           var target = {};
@@ -34,11 +34,11 @@ export default {
         return () => {
           let o = null
           for (let i = 0; i < N; i++) {
-            o=_objectWithoutPropertiesLoose(o1, exclude)
-            o=_objectWithoutPropertiesLoose(o2, exclude)
-            o=_objectWithoutPropertiesLoose(o3, exclude)
-            o=_objectWithoutPropertiesLoose(o4, exclude)
-            o=_objectWithoutPropertiesLoose(o5, exclude)
+            o=_clone__keys(o1, exclude)
+            o=_clone__keys(o2, exclude)
+            o=_clone__keys(o3, exclude)
+            o=_clone__keys(o4, exclude)
+            o=_clone__keys(o5, exclude)
           }
           return o
         }
@@ -47,8 +47,8 @@ export default {
     {
       id: 'updated',
       setup: () => {
-        function _objectWithoutPropertiesLoose(source, excluded) {
-          if (source == null)
+        function _clone__noKeys(source, excluded) {
+          if (source === null)
             return {};
           var target = {};
           for (const key in source) {
@@ -64,11 +64,11 @@ export default {
         return () => {
           let o = null
           for (let i = 0; i < N; i++) {
-            o=_objectWithoutPropertiesLoose(o1, exclude)
-            o=_objectWithoutPropertiesLoose(o2, exclude)
-            o=_objectWithoutPropertiesLoose(o3, exclude)
-            o=_objectWithoutPropertiesLoose(o4, exclude)
-            o=_objectWithoutPropertiesLoose(o5, exclude)
+            o=_clone__noKeys(o1, exclude)
+            o=_clone__noKeys(o2, exclude)
+            o=_clone__noKeys(o3, exclude)
+            o=_clone__noKeys(o4, exclude)
+            o=_clone__noKeys(o5, exclude)
           }
           return o
         }
