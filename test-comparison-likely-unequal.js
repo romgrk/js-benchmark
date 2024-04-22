@@ -13,6 +13,8 @@ function randomValue() {
 const data = Array.from({ length: 100_000 }).map(randomValue)
 const copy = Array.from({ length: 100_000 }).map(randomValue)
 
+const is = Object.is
+
 export default {
   blocks: [
     {
@@ -68,6 +70,24 @@ export default {
           return result
         }
       }
-    }
+    },
+    {
+      id: 'is',
+      setup: () => {
+        return function compare_is() {
+          let result = 0
+
+          for (let i = 0; i < data.length - 1; i++) {
+            const a = data[i]
+            const b = copy[i]
+            if (is(a, b)) {
+              result += 1
+            }
+          }
+
+          return result
+        }
+      }
+    },
   ]
 }
