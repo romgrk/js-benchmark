@@ -1,5 +1,5 @@
 /*
- * test-comparison.js
+ * test-comparison-likely-unequal.js
  */
 
 function randomValue() {
@@ -15,7 +15,6 @@ function randomValue() {
 }
 
 const data = Array.from({ length: 100_000 }).map(randomValue)
-
 
 export default {
   blocks: [
