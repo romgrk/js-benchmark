@@ -1,7 +1,3 @@
-/*
- * test-comparison.js
- */
-
 function randomValue() {
   const n = Math.random()
   if (n < 0.05) return { [String.fromCharCode(65 + ~~(Math.random() * 10)).repeat(1 + ~~(Math.random() * 10) )]: randomValue() }
@@ -15,6 +11,7 @@ function randomValue() {
 }
 
 const data = Array.from({ length: 100_000 }).map(randomValue)
+const copy = data.slice().map(value => Math.random() < 0.01 ? randomValue() : value)
 
 export default {
   blocks: [
@@ -26,7 +23,7 @@ export default {
 
           for (let i = 0; i < data.length - 1; i++) {
             const a = data[i]
-            const b = data[i + 0]
+            const b = copy[i]
             if (a == b) {
               result += 1
             }
@@ -44,7 +41,7 @@ export default {
 
           for (let i = 0; i < data.length - 1; i++) {
             const a = data[i]
-            const b = data[i + 0]
+            const b = copy[i]
             if (a === b) {
               result += 1
             }
@@ -62,7 +59,7 @@ export default {
 
           for (let i = 0; i < data.length - 1; i++) {
             const a = data[i]
-            const b = data[i + 0]
+            const b = copy[i]
             if (Object.is(a, b)) {
               result += 1
             }
