@@ -1,4 +1,4 @@
-// Usage: ./run.js <modulePath.js> [--gc]
+// Usage: ./run-on-engine.js <modulePath.js> [--gc]
 
 const timeToRun = 1000
 const pausePerBlock = 500
@@ -37,8 +37,8 @@ async function run(path) {
   blocks.forEach(block => {
     console.log(`CASE: ${(block.id + ':').padEnd(maxLength + 1, ' ')} `
       + '#'.repeat(block.result.percent / 2).padEnd(50, '.')
-      + ' ' + block.result.percent + '%'
-      + ` (${block.result.amountOfRounds} ops)`
+      + ' ' + block.result.percent.toFixed(2).padStart(7) + '%'
+      + ` (${block.result.amountOfRounds.toLocaleString()} ops)`
       + ` (${(block.result.runTime / block.result.amountOfRounds).toPrecision(4)} ms/op)`
       )
   })
@@ -48,7 +48,7 @@ async function getBlocks(path) {
   const module = await import(path)
   const blocks = module.default.blocks
 
-  blocks.forEach((block, index) => {
+  blocks.forEach(block => {
     block.run = block.setup()
   })
 
@@ -72,7 +72,8 @@ async function runTests(blocks) {
     block.result = {
       runTime: testResult.runTime,
       amountOfRounds: testResult.counter,
-      percent: 0
+      percent: 0,
+      checksum: block.run(),
     }
     let t = testResult.timer - completeTestStart
     let progress = Math.round((100 / timeForTest) * t)
@@ -86,6 +87,11 @@ async function runTests(blocks) {
   const maxRounds = f.result.amountOfRounds
   for (let block of blocks) {
     block.result.percent = Math.round(((100 / maxRounds) * block.result.amountOfRounds)*100)/100
+  }
+
+  const checksum = blocks[0]?.checksum
+  if (!blocks.every(b => b.checksum === checksum)) {
+    throw new Error('Inconsistent checksum across cases: ' + JSON.stringify(blocks.map(b => b.checksum)))
   }
 
   return blocks

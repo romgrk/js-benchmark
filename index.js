@@ -6,7 +6,7 @@ const commands = [
   'gjs -m',
 ]
 
-commands.map(c => c + ' run.js').forEach(command => {
+commands.map(c => c + ' run-on-engine.js').forEach(command => {
   const [cmd, ...args] = command.split(' ').concat(process.argv.slice(2))
 
   const version = spawnSync(cmd, ['--version'], {}).stdout.toString().trim().split(' ').at(-1)
