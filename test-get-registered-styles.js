@@ -1,3 +1,5 @@
+
+// classNames with sequential spaces
 const inputs = [
   'MuiButtonBase-root  css-1skqidh  MuiButton-root MuiButton-outlined MuiButton-outlinedSuccess   MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSuccess   MuiButton-root MuiButton-outlined MuiButton-outlinedSuccess MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSuccess  css-14x6zue',
 ]
@@ -72,17 +74,4 @@ export default {
       },
     },
   ]
-}
-
-function getStrings() {
-return [
-    "label:XXXXXX;background-color:#121212;color:#fff;transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;",
-    "label:XXXXXX;border-radius:4px;",
-    "label:XXXXXX;border:1px solid rgba(255, 255, 255, 0.12);",
-    "box-shadow:var(--Paper-shadow);background-image:var(--Paper-overlay);",
-    "label:XXXXXX;background-color:#121212;color:#fff;transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;;label:YYYYY;border-radius:4px;;;box-shadow:var(--Paper-shadow);background-image:var(--Paper-overlay);;;",
-    "background-color:#121212;color:#fff;transition:box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;;;border-radius:4px;;;box-shadow:var(--Paper-shadow);background-image:var(--Paper-overlay);;;",
-    "color:var(--variant-containedColor);label:ZZZZZZZ;background-color:var(--variant-containedBg);box-shadow:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);&:hover{box-shadow:0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12);@media (hover: none){box-shadow:0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12);}}&:active{box-shadow:0px 5px 5px -3px rgba(0,0,0,0.2),0px 8px 10px 1px rgba(0,0,0,0.14),0px 3px 14px 2px rgba(0,0,0,0.12);}&.Mui-focusVisible{box-shadow:0px 3px 5px -1px rgba(0,0,0,0.2),0px 6px 10px 0px rgba(0,0,0,0.14),0px 1px 18px 0px rgba(0,0,0,0.12);}&.Mui-disabled{color:rgba(255, 255, 255, 0.3);box-shadow:none;background-color:rgba(255, 255, 255, 0.12);}",
-    "padding:5px 15px;border:1px solid currentColor;border-color:var(--variant-outlinedBorder, currentColor);background-color:var(--variant-outlinedBg);color:var(--variant-outlinedColor);&.Mui-disabled{border:1px solid rgba(255, 255, 255, 0.12);};label:ZZZZZZZZ",
-]
 }
