@@ -1,10 +1,5 @@
-/*
- * test-label-parsing.js
- */
-
 const inputs = [
   'MuiButtonBase-root  css-1skqidh  MuiButton-root MuiButton-outlined MuiButton-outlinedSuccess   MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSuccess   MuiButton-root MuiButton-outlined MuiButton-outlinedSuccess MuiButton-sizeMedium MuiButton-outlinedSizeMedium MuiButton-colorSuccess  css-14x6zue',
-  'css-15hif23 css-1vec1w css-14x6zue css-14ojtvh css-kxptbm css-1skqidh'
 ]
 
 const registered = {
