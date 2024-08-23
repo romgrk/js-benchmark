@@ -132,12 +132,26 @@ function murmur2_improved(str) {
   return h.toString(36)
 }
 
+function murmur2_cached(str, cache) {
+  if (cache) {
+    const hash = cache.get(str)
+    if (hash) {
+      return hash
+    }
+  }
+  const hash = murmur2_improved(str)
+  if (cache) {
+    cache.set(str, hash)
+  }
+  return hash
+}
+
 export default {
   blocks: [
     {
       id: 'murmur2_original',
       setup: () => {
-        return function test_murmur2_original() {
+        return () => {
           for (let i = 0; i < inputs.length; i++) {
             murmur2_original(inputs[i])
           }
@@ -147,9 +161,21 @@ export default {
     {
       id: 'murmur2_improved',
       setup: () => {
-        return function test_murmur2_improved() {
+        return () => {
           for (let i = 0; i < inputs.length; i++) {
             murmur2_improved(inputs[i])
+          }
+        }
+      }
+    },
+    {
+      id: 'murmur2_cached',
+      setup: () => {
+        const cache = new Map()
+
+        return () => {
+          for (let i = 0; i < inputs.length; i++) {
+            murmur2_cached(inputs[i], cache)
           }
         }
       }
