@@ -9,5 +9,10 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "canvas": "^2.11.2",
+    "colord": "^2.9.3",
+    "pureimage": "^0.4.13"
+  }
 }

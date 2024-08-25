@@ -5,7 +5,7 @@
 
 const inputs = getStrings()
 
-function murmur2_original(str) {
+export function murmur2_original(str) {
   // 'm' and 'r' are mixing constants generated offline.
   // They're not really 'magic', they just happen to work well.
 
@@ -73,7 +73,7 @@ let buffer = new ArrayBuffer(bufferLength)
 let uint8View = new Uint8Array(buffer)
 let int32View = new Int32Array(buffer)
 
-function murmur2_improved(str) {
+export function murmur2_improved(str) {
   if (str.length > bufferLength) {
     // buffer.resize() is only available in recent browsers, so we re-allocate
     // a new and views
@@ -132,7 +132,7 @@ function murmur2_improved(str) {
   return h.toString(36)
 }
 
-function murmur2_cached(str, cache) {
+export function murmur2_cached(str, cache) {
   const cached = cache.get(str)
   if (cached) {
     return cached
@@ -145,6 +145,88 @@ function murmur2_cached(str, cache) {
   }
   cache.set(str, hash)
   return hash
+}
+
+const FNV_PRIME_32 = 16_777_619
+const FNV_OFFSET_32 = 2_166_136_261
+
+export function fnv1a(string) {
+  if (string.length > bufferLength) {
+    // buffer.resize() is only available in recent browsers, so we re-allocate
+    // a new and views
+    bufferLength = str.length + (4 - str.length % 4)
+    buffer = new ArrayBuffer(bufferLength)
+
+    uint8View = new Uint8Array(buffer)
+    int32View = new Int32Array(buffer)
+  }
+
+  const length8 = encoder.encodeInto(string, uint8View).written;
+
+  let h = FNV_OFFSET_32
+
+  for (let index = 0; index < length8; index++) {
+    h = h ^ uint8View[index]
+    h = Math.imul(h, FNV_PRIME_32)
+  }
+
+  h = h >>> 0
+
+  return h.toString(36)
+}
+
+export function djb2a(string) {
+  if (string.length > bufferLength) {
+    // buffer.resize() is only available in recent browsers, so we re-allocate
+    // a new and views
+    bufferLength = str.length + (4 - str.length % 4)
+    buffer = new ArrayBuffer(bufferLength)
+
+    uint8View = new Uint8Array(buffer)
+    int32View = new Int32Array(buffer)
+  }
+
+  const length8 = encoder.encodeInto(string, uint8View).written;
+
+  let h = 5381
+
+  for (let index = 0; index < length8; index++) {
+    h = ((h << 5) + h | 0) ^ uint8View[index] | 0
+  }
+
+  h = h >>> 0
+
+  return h.toString(36)
+}
+
+export function goober_unmodified(str) {
+  let i = 0,
+      out = 11;
+  while (i < str.length) out = (101 * out + str.charCodeAt(i++)) >>> 0;
+  return 'go' + out;
+}
+
+export function goober(string) {
+  let i = 0
+  let out = 11
+
+  if (string.length > bufferLength) {
+    // buffer.resize() is only available in recent browsers, so we re-allocate
+    // a new and views
+    bufferLength = str.length + (4 - str.length % 4)
+    buffer = new ArrayBuffer(bufferLength)
+
+    uint8View = new Uint8Array(buffer)
+    int32View = new Int32Array(buffer)
+  }
+
+  const length = encoder.encodeInto(string, uint8View).written;
+
+  while (i < length) {
+    out = (101 * out + uint8View[i++]) >>> 0
+  }
+
+  return out.toString(36);
 }
 
 export default {
@@ -169,27 +251,60 @@ export default {
         }
       }
     },
+
+    // {
+    //   id: 'murmur2_cached (MUI dataset)',
+    //   setup: () => {
+    //     const cache = new Map()
+    //     return () => {
+    //       for (let i = 0; i < inputs.length; i++) {
+    //         murmur2_cached(inputs[i], cache)
+    //       }
+    //     }
+    //   }
+    // },
+    // {
+    //   id: 'murmur2_cached (no cache hit)',
+    //   setup: () => {
+    //     const cache = new Map()
+    //
+    //     const modified = inputs.map((string, index) => `${index}-${string}`)
+    //     return () => {
+    //       for (let i = 0; i < modified.length; i++) {
+    //         murmur2_cached(modified[i], cache)
+    //       }
+    //     }
+    //   }
+    // },
     {
-      id: 'murmur2_cached (MUI dataset)',
+      id: 'fnv-1a',
       setup: () => {
-        const cache = new Map()
         return () => {
-          for (let i = 0; i < inputs.length; i++) {
-            murmur2_cached(inputs[i], cache)
-          }
+          for (let i = 0; i < inputs.length; i++) { fnv1a(inputs[i]) }
         }
       }
     },
     {
-      id: 'murmur2_cached (no cache hit)',
+      id: 'djb2a',
       setup: () => {
-        const cache = new Map()
-
-        const modified = inputs.map((string, index) => `${index}-${string}`)
         return () => {
-          for (let i = 0; i < modified.length; i++) {
-            murmur2_cached(modified[i], cache)
-          }
+          for (let i = 0; i < inputs.length; i++) { djb2a(inputs[i]) }
+        }
+      }
+    },
+    {
+      id: 'goober',
+      setup: () => {
+        return () => {
+          for (let i = 0; i < inputs.length; i++) { goober(inputs[i]) }
+        }
+      }
+    },
+    {
+      id: 'goober_unmodified',
+      setup: () => {
+        return () => {
+          for (let i = 0; i < inputs.length; i++) { goober_unmodified(inputs[i]) }
         }
       }
     },
