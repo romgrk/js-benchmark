@@ -7,10 +7,11 @@ import * as hash from './benchmarks/hashing.js'
 
 
 const fns = [
-  hash.murmur2_improved,
+  hash.murmur2,
   hash.fnv1a,
   hash.djb2a,
   hash.goober,
+  hash.xxh,
 ]
 
 fns.forEach(fn => {
