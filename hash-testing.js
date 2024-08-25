@@ -10,7 +10,7 @@ const fns = [
   hash.murmur2,
   hash.fnv1a,
   hash.djb2a,
-  hash.goober,
+  hash.goober_unmodified,
   hash.xxh,
 ]
 
