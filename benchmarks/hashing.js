@@ -282,24 +282,11 @@ export function goober_asmjs(str) {
   return 'go' + out;
 }
 
-export function goober(string) {
+export function goober(str) {
   let i = 0
   let out = 11
-
-  if (string.length > bufferLength) {
-    // buffer.resize() is only available in recent browsers, so we re-allocate
-    // a new and views
-    bufferLength = str.length + (4 - str.length % 4)
-    buffer = new ArrayBuffer(bufferLength)
-
-    uint8View = new Uint8Array(buffer)
-    int32View = new Int32Array(buffer)
-  }
-
-  const length = encoder.encodeInto(string, uint8View).written;
-
-  while (i < length) {
-    out = (101 * out + uint8View[i++]) >>> 0
+  while (i < str.length) {
+    out = (101 * out + str.charCodeAt(i++)) >>> 0;
   }
 
   return out.toString(36);
