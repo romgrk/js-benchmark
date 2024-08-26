@@ -191,6 +191,65 @@ export function murmur2_hex(str) {
   return format_hex(h)
 }
 
+export function murmur2_dec(str) {
+  if (str.length > bufferLength) {
+    // buffer.resize() is only available in recent browsers, so we re-allocate
+    // a new and views
+    bufferLength = str.length + (4 - str.length % 4)
+    buffer = new ArrayBuffer(bufferLength)
+
+    uint8View = new Uint8Array(buffer)
+    int32View = new Int32Array(buffer)
+  }
+
+  const length = encoder.encodeInto(str, uint8View).written;
+
+  // 'm' and 'r' are mixing constants generated offline.
+  // They're not really 'magic', they just happen to work well.
+
+  const m = 0x5bd1e995;
+  const r = 24;
+
+  // Initialize the hash
+  let h = 0
+
+  // Mix 4 bytes at a time into the hash
+
+  let i = 0
+  let len = length
+  for (; len >= 4; i++, len -= 4) {
+    let k = int32View[i]
+
+    k = Math.imul(k, m)
+    k ^= k >>> r
+    k = Math.imul(k, m)
+
+    h = Math.imul(h, m)
+    h ^= k
+  }
+
+  // Handle the last few bytes of the input array
+
+  switch (len) {
+    case 3:
+      h ^= (uint8View[i * 4 + 2] & 0xff) << 16
+    case 2:
+      h ^= (uint8View[i * 4 + 1] & 0xff) << 8
+    case 1:
+      h ^= uint8View[i * 4] & 0xff
+      h = Math.imul(h, m)
+  }
+
+  // Do a few final mixes of the hash to ensure the last few
+  // bytes are well-incorporated.
+
+  h ^= h >>> 13
+  h = Math.imul(h, m)
+  h = (h ^ (h >>> 15)) >>> 0
+
+  return '' + h
+}
+
 export function murmur2_cached(str, cache) {
   const cached = cache.get(str)
   if (cached) {
@@ -223,55 +282,6 @@ function get(n, offset) {
 
 
 const rotl32 = (x, r) => (x << r) | (x >>> 32 - r);
-
-export function xxh_unmodified(string) {
-  if (string.length > bufferLength) {
-    // buffer.resize() is only available in recent browsers, so we re-allocate
-    // a new and views
-    bufferLength = str.length + (4 - str.length % 4)
-    buffer = new ArrayBuffer(bufferLength)
-
-    uint8View = new Uint8Array(buffer)
-    int32View = new Int32Array(buffer)
-  }
-
-  const length8 = encoder.encodeInto(string, uint8View).written;
-
-  const buf = uint8View
-
-  const seed = 0;
-  const len = length8 | 0;
-  let i = 0;
-  let h = (seed + len | 0) + 0x165667B1 | 0;
-
-  if (len < 16) {
-    for (; (i + 3 | 0) < len; i = i + 4 | 0)
-      h = Math.imul(rotl32(h + Math.imul(int32View[i], 0xC2B2AE3D) | 0, 17), 0x27D4EB2F);
-  } else {
-    let v0 = seed + 0x24234428 | 0;
-    let v1 = seed + 0x85EBCA77 | 0;
-    let v2 = seed;
-    let v3 = seed - 0x9E3779B1 | 0;
-
-    for (; (i + 15 | 0) < len; i = i + 16 | 0) {
-      v0 = Math.imul(rotl32(v0 + Math.imul(int32View[i + 0 | 0], 0x85EBCA77) | 0, 13), 0x9E3779B1);
-      v1 = Math.imul(rotl32(v1 + Math.imul(int32View[i + 4 | 0], 0x85EBCA77) | 0, 13), 0x9E3779B1);
-      v2 = Math.imul(rotl32(v2 + Math.imul(int32View[i + 8 | 0], 0x85EBCA77) | 0, 13), 0x9E3779B1);
-      v3 = Math.imul(rotl32(v3 + Math.imul(int32View[i + 12 | 0], 0x85EBCA77) | 0, 13), 0x9E3779B1);
-    }
-
-    h = (((rotl32(v0, 1) + rotl32(v1, 7) | 0) + rotl32(v2, 12) | 0) + rotl32(v3, 18) | 0) + len | 0;
-    for (; (i + 3 | 0) < len; i = i + 4 | 0)
-      h = Math.imul(rotl32(h + Math.imul(int32View[i], 0xC2B2AE3D) | 0, 17), 0x27D4EB2F);
-  }
-
-  for (; i < len; i = i + 1 | 0)
-    h = Math.imul(rotl32(h + Math.imul(buf[i], 0x165667B1) | 0, 11), 0x9E3779B1);
-  h = Math.imul(h ^ h >>> 15, 0x85EBCA77);
-  h = Math.imul(h ^ h >>> 13, 0xC2B2AE3D);
-
-  return ((h ^ h >>> 16) >>> 0).toString(36);
-}
 
 export function xxh(string) {
   if (string.length > bufferLength) {
@@ -349,13 +359,13 @@ export function fnv1a(string) {
     int32View = new Int32Array(buffer)
   }
 
-  const length8 = encoder.encodeInto(string, uint8View).written;
+  const length8 = encoder.encodeInto(string, uint8View).written | 0;
 
-  let h = FNV_OFFSET_32
+  let h = FNV_OFFSET_32 | 0
 
-  for (let index = 0; index < length8; index++) {
-    h = h ^ uint8View[index]
-    h = Math.imul(h, FNV_PRIME_32)
+  for (let index = 0; index < length8; index = index + 1 | 0) {
+    h = h ^ (uint8View[index] | 0)
+    h = Math.imul(h, FNV_PRIME_32 | 0)
   }
 
   h = h >>> 0
@@ -374,11 +384,11 @@ export function djb2a(string) {
     int32View = new Int32Array(buffer)
   }
 
-  const length8 = encoder.encodeInto(string, uint8View).written;
+  const length8 = encoder.encodeInto(string, uint8View).written | 0;
 
   let h = 5381
 
-  for (let index = 0; index < length8; index++) {
+  for (let index = 0; index < length8; index = index + 1 | 0) {
     h = ((h << 5) + h | 0) ^ uint8View[index] | 0
   }
 
@@ -387,25 +397,13 @@ export function djb2a(string) {
   return h.toString(36)
 }
 
-export function goober_unmodified(str) {
-  let i = 0,
-      out = 11;
-  while (i < str.length) out = (101 * out + str.charCodeAt(i++)) >>> 0;
-  return 'go' + out;
-}
-
-export function goober_asmjs(str) {
-  let i = 0,
-      out = 11;
-  while (i < str.length) out = (Math.imul(101, out) + str.charCodeAt(i++) | 0) >>> 0;
-  return 'go' + out;
-}
-
 export function goober(str) {
   let i = 0
+  let l = str.length
+
   let out = 11
-  while (i < str.length) {
-    out = (101 * out + str.charCodeAt(i++)) >>> 0;
+  while (i < l) {
+    out = ((Math.imul(101, out) + str.charCodeAt(i++)) | 0) >>> 0;
   }
 
   return out.toString(36);
@@ -413,28 +411,28 @@ export function goober(str) {
 
 export default {
   blocks: [
-    // {
-    //   id: 'murmur2_unmodified',
-    //   setup: () => {
-    //     return () => {
-    //       for (let i = 0; i < inputs.length; i++) {
-    //         murmur2_unmodified(inputs[i])
-    //       }
-    //     }
-    //   }
-    // },
-    //
-    // {
-    //   id: 'murmur2',
-    //   setup: () => {
-    //     return () => {
-    //       for (let i = 0; i < inputs.length; i++) {
-    //         murmur2(inputs[i])
-    //       }
-    //     }
-    //   }
-    // },
-    //
+    {
+      id: 'murmur2_unmodified',
+      setup: () => {
+        return () => {
+          for (let i = 0; i < inputs.length; i++) {
+            murmur2_unmodified(inputs[i])
+          }
+        }
+      }
+    },
+
+    {
+      id: 'murmur2',
+      setup: () => {
+        return () => {
+          for (let i = 0; i < inputs.length; i++) {
+            murmur2(inputs[i])
+          }
+        }
+      }
+    },
+
     // {
     //   id: 'murmur2_hex',
     //   setup: () => {
@@ -445,7 +443,16 @@ export default {
     //     }
     //   }
     // },
-
+    // {
+    //   id: 'murmur2_dec',
+    //   setup: () => {
+    //     return () => {
+    //       for (let i = 0; i < inputs.length; i++) {
+    //         murmur2_dec(inputs[i])
+    //       }
+    //     }
+    //   }
+    // },
 
     // {
     //   id: 'murmur2_cached (MUI dataset)',
@@ -480,39 +487,31 @@ export default {
         }
       }
     },
+
     {
-      id: 'xxh_unmodified',
+      id: 'fnv-1a',
       setup: () => {
         return () => {
-          for (let i = 0; i < inputs.length; i++) { xxh_unmodified(inputs[i]) }
+          for (let i = 0; i < inputs.length; i++) { fnv1a(inputs[i]) }
         }
       }
     },
-
-    // {
-    //   id: 'fnv-1a',
-    //   setup: () => {
-    //     return () => {
-    //       for (let i = 0; i < inputs.length; i++) { fnv1a(inputs[i]) }
-    //     }
-    //   }
-    // },
-    // {
-    //   id: 'djb2a',
-    //   setup: () => {
-    //     return () => {
-    //       for (let i = 0; i < inputs.length; i++) { djb2a(inputs[i]) }
-    //     }
-    //   }
-    // },
-    // {
-    //   id: 'goober_unmodified',
-    //   setup: () => {
-    //     return () => {
-    //       for (let i = 0; i < inputs.length; i++) { goober_unmodified(inputs[i]) }
-    //     }
-    //   }
-    // },
+    {
+      id: 'djb2a',
+      setup: () => {
+        return () => {
+          for (let i = 0; i < inputs.length; i++) { djb2a(inputs[i]) }
+        }
+      }
+    },
+    {
+      id: 'goober',
+      setup: () => {
+        return () => {
+          for (let i = 0; i < inputs.length; i++) { goober(inputs[i]) }
+        }
+      }
+    },
   ]
 }
 
