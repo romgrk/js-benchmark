@@ -296,8 +296,6 @@ export function xxh(string) {
 
   const length8 = encoder.encodeInto(string, uint8View).written;
 
-  const buf = uint8View
-
   const seed = 0;
   const len = length8 | 0;
   let i = 0;
@@ -330,12 +328,12 @@ export function xxh(string) {
     + len | 0;
 
     for (; (i + 3 | 0) < len; i = i + 4 | 0) {
-      h = Math.imul(rotl32(h + Math.imul(int32View[i], 0xC2B2AE3D) | 0, 17) | 0, 0x27D4EB2F);
+      h = Math.imul(rotl32(h + Math.imul(int32View[i] | 0, 0xC2B2AE3D) | 0, 17) | 0, 0x27D4EB2F);
     }
   }
 
   for (; i < len; i = i + 1 | 0) {
-    h = Math.imul(rotl32(h + Math.imul(buf[i], 0x165667B1) | 0, 11) | 0, 0x9E3779B1);
+    h = Math.imul(rotl32(h + Math.imul(uint8View[i] | 0, 0x165667B1) | 0, 11) | 0, 0x9E3779B1);
   }
   h = Math.imul(h ^ h >>> 15, 0x85EBCA77);
   h = Math.imul(h ^ h >>> 13, 0xC2B2AE3D);
@@ -389,7 +387,7 @@ export function djb2a(string) {
   let h = 5381
 
   for (let index = 0; index < length8; index = index + 1 | 0) {
-    h = ((h << 5) + h | 0) ^ uint8View[index] | 0
+    h = ((h << 5) + h | 0) ^ (uint8View[index] | 0)
   }
 
   h = h >>> 0
