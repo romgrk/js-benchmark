@@ -57,7 +57,7 @@ async function getBlocks(path) {
 
 async function runTests(blocks) {
   for (let block of blocks) {
-    runTestForAmountOfTime(block, 500)
+    runTestForAmountOfTime(block, 1000)
   }
   await sleep(1000)
 
@@ -89,8 +89,8 @@ async function runTests(blocks) {
     block.result.percent = Math.round(((100 / maxRounds) * block.result.amountOfRounds)*100)/100
   }
 
-  const checksum = blocks[0]?.checksum
-  if (!blocks.every(b => b.checksum === checksum)) {
+  const checksum = blocks[0]?.result.checksum
+  if (!blocks.every(b => b.result.checksum === checksum)) {
     throw new Error('Inconsistent checksum across cases: ' + JSON.stringify(blocks.map(b => b.checksum)))
   }
 
