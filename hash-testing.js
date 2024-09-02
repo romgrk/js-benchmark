@@ -7,10 +7,10 @@ import * as hash from './benchmarks/hashing.js'
 
 
 const fns = [
-  hash.murmur2,
-  hash.fnv1a,
-  hash.djb2a,
-  hash.goober_unmodified,
+  // hash.murmur2,
+  // hash.fnv1a,
+  // hash.djb2a,
+  // hash.goober_unmodified,
   hash.xxh,
 ]
 

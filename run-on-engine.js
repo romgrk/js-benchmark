@@ -34,9 +34,11 @@ async function run(path) {
 
   const maxLength = blocks.reduce((max, block) => Math.max(max, block.id.length), 0)
 
+  const barLength = 50
+
   blocks.forEach(block => {
     console.log(`CASE: ${(block.id + ':').padEnd(maxLength + 1, ' ')} `
-      + '#'.repeat(block.result.percent / 2).padEnd(50, '.')
+      + '#'.repeat(block.result.percent / (100 / barLength)).padEnd(barLength, '.')
       + ' ' + block.result.percent.toFixed(2).padStart(7) + '%'
       + ` (${block.result.amountOfRounds.toLocaleString()} ops)`
       + ` (${(block.result.runTime / block.result.amountOfRounds).toPrecision(4)} ms/op)`
