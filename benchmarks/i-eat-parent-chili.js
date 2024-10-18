@@ -22,12 +22,7 @@ const generateOfferBadgeSimple = (opts, offer) => {
   return badge;
 };
 
-const populateData = () => {
-  console.log('Populating data...');
-  searchEntries = [];
-  excludeTags = [];
-  terms = [];
-
+const populateData = (searchEntries, excludeTags, terms) => {
   const se = (i) => ({
     isOpen: () => true,
     getOffers: () => [
@@ -133,7 +128,7 @@ const forWay = (searchEntries, excludeTags, terms, validOffers, validRestaurants
 };
 
 
-const iterations = 10
+const iterations = 1
 
 export default {
   blocks: [
@@ -145,6 +140,7 @@ export default {
         let terms = [];
         const validOffers = [];
         const validRestaurantsIds = [];
+        populateData(searchEntries, excludeTags, terms)
 
         return () => {
           let result = 0
@@ -163,6 +159,7 @@ export default {
         let terms = [];
         const validOffers = [];
         const validRestaurantsIds = [];
+        populateData(searchEntries, excludeTags, terms)
 
         return () => {
           let result = 0
