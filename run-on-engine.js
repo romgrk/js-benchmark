@@ -15,6 +15,7 @@ const pausePerBlock = 500
 // }
 
 const args = typeof process !== 'undefined' ? process.argv.slice(2) : ARGV
+globalThis.PROCESS_ARGS = args
 const gc =
   typeof globalThis.gc !== 'undefined' ? globalThis.gc :
   typeof Bun !== 'undefined' ? Bun.gc : () => {};
