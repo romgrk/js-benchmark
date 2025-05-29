@@ -2,8 +2,8 @@ import { spawnSync } from 'child_process'
 
 const commands = [
   'node',
-  // 'bun run',
-  // 'gjs -m',
+  'bun run',
+  'gjs -m',
 ]
 
 commands.map(c => c + ' run-on-engine.js').forEach(command => {

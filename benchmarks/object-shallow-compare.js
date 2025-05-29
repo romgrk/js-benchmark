@@ -1,8 +1,9 @@
 
 const nObjects = 64
 
-const generateKey   = process.argv[4] === 'same-shape'  ? (index) => index : () => Math.random()
-const generateValue = process.argv[4] === 'same-values' ? (index) => index : () => Math.random()
+const nKeys         = PROCESS_ARGS[1] ? +PROCESS_ARGS[1] : 15
+const generateKey   = PROCESS_ARGS[2] === 'same-shape'  ? (index) => index : () => Math.random()
+const generateValue = PROCESS_ARGS[3] === 'same-values' ? (index) => index : () => Math.random()
 
 function generateMono(nKeys) {
   return Array.from({ length: nObjects }).map(() =>
@@ -13,7 +14,6 @@ function generateMono(nKeys) {
   )
 }
 
-const nKeys = process.argv[3] ? +process.argv[3] : 15
 
 const inputs = generateMono(nKeys)
 
@@ -25,9 +25,9 @@ function shallowDiffers(a, b) {
 }
 
 function shallowDiffers_reverse(a, b) {
-	for (let i in a) if (i !== '__source' && a[i] !== b[i]) return true;
-	for (let i in b) if (i !== '__source' && !(i in a)) return true;
-	return false;
+  for (let i in a) if (i !== '__source' && a[i] !== b[i]) return true;
+  for (let i in b) if (i !== '__source' && !(i in a)) return true;
+  return false;
 }
 
 function fastObjectShallowEqual(a, b) {
@@ -94,24 +94,24 @@ export default {
         }
       }
     },
-    // {
-    //   id: 'fastObjectShallowEqual',
-    //   setup: () => {
-    //     const a = inputs[0]
-    //
-    //     return () => {
-    //       let result = 0
-    //
-    //       for (let i = 0; i < inputs.length - 1; i++) {
-    //         const b = inputs[i]
-    //         if (fastObjectShallowEqual(a, b)) {
-    //           result += 1
-    //         }
-    //       }
-    //
-    //       return result
-    //     }
-    //   }
-    // },
+    {
+      id: 'fastObjectShallowEqual',
+      setup: () => {
+        const a = inputs[0]
+
+        return () => {
+          let result = 0
+
+          for (let i = 0; i < inputs.length - 1; i++) {
+            const b = inputs[i]
+            if (fastObjectShallowEqual(a, b)) {
+              result += 1
+            }
+          }
+
+          return result
+        }
+      }
+    },
   ]
 }
