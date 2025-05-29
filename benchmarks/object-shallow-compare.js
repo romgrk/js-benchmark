@@ -1,20 +1,21 @@
 
 const nObjects = 64
 
-function generateMono(nKeys, generate) {
+const generateKey   = process.argv[4] === 'same-shape'  ? (index) => index : () => Math.random()
+const generateValue = process.argv[4] === 'same-values' ? (index) => index : () => Math.random()
+
+function generateMono(nKeys) {
   return Array.from({ length: nObjects }).map(() =>
     Array.from({ length: nKeys }).reduce((acc, curr, index) => {
-      acc['key' + index] = generate(index)
+      acc['key' + generateKey(index)] = generateValue(index)
       return acc
     }, {})
   )
 }
 
-const generate = process.argv[4] === 'equal' ? (index) => index : () => Math.random()
-
 const nKeys = process.argv[3] ? +process.argv[3] : 15
 
-const inputs = generateMono(nKeys, generate)
+const inputs = generateMono(nKeys)
 
 
 function shallowDiffers(a, b) {
