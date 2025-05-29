@@ -94,24 +94,24 @@ export default {
         }
       }
     },
-    {
-      id: 'fastObjectShallowEqual',
-      setup: () => {
-        const a = inputs[0]
-
-        return () => {
-          let result = 0
-
-          for (let i = 0; i < inputs.length - 1; i++) {
-            const b = inputs[i]
-            if (fastObjectShallowEqual(a, b)) {
-              result += 1
-            }
-          }
-
-          return result
-        }
-      }
-    },
+    // {
+    //   id: 'fastObjectShallowEqual',
+    //   setup: () => {
+    //     const a = inputs[0]
+    //
+    //     return () => {
+    //       let result = 0
+    //
+    //       for (let i = 0; i < inputs.length - 1; i++) {
+    //         const b = inputs[i]
+    //         if (fastObjectShallowEqual(a, b)) {
+    //           result += 1
+    //         }
+    //       }
+    //
+    //       return result
+    //     }
+    //   }
+    // },
   ]
 }
